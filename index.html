@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tebak Masa Depan Bedasarkan Nama</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(
+          45deg,
+          #0073ff,
+          #a9c2df
+        ); /* ganti warna bg */
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        animation: bgAnimation 5s ease infinite;
+      }
+
+      @keyframes bgAnimation {
+        0% {
+          background: linear-gradient(45deg, #0073ff, #a9c2df);
+        }
+        50% {
+          background: linear-gradient(45deg, #0073ff, #a9c2df);
+        }
+        100% {
+          background: linear-gradient(45deg, #0073ff, #a9c2df);
+        }
+      }
+
+      .container {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        width: 90%;
+        transform: translateY(100px);
+        animation: slideUp 1s forwards;
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(100px);
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      h1 {
+        margin-bottom: 20px;
+        color: #0073ff; /* ubah warna text judul */
+        font-size: 2em;
+        letter-spacing: 2px;
+        animation: fadeIn 1.5s ease;
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      input {
+        padding: 12px;
+        margin-bottom: 20px;
+        width: 80%;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 1.2em;
+        transition: all 0.3s ease-in-out;
+      }
+
+      input:focus {
+        border-color: #085fca; /* ubah warna border saat fokus */
+        outline: none;
+        box-shadow: 0 0 10px rgba(45, 51, 107, 0.5);
+      }
+
+      button {
+        padding: 12px 30px;
+        background-color: #0073ff; /* ubah warna tombol  */
+        color: white;
+        border: none;
+        border-radius: 30px;
+        font-size: 1.2em;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+      }
+
+      button:hover {
+        background-color: #97bbe6; /* ubah warna tombol saat hover */
+        transform: scale(1.1);
+      }
+
+      #tabelHasil {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+        animation: fadeInTable 1s ease;
+        max-height: 300px; /* atur tinggi max table */
+        overflow-y: auto; /* aktifkan scroll vertikal */
+        display: block; /* menjadikan table menjadi blok agar bisa discroll */
+      }
+
+      #tableHasil thead,
+      #tabelHasil tbody {
+        max-height: 200px; /* atur tinggi max untuk tbody */
+        overflow-y: auto;
+      }
+
+      #tabelHasil th,
+      #tabelHasil td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: left;
+        width: 33%; /* menjaga agar kolom tabel tetap konsisten */
+      }
+
+      #tabelHasil th {
+        background-color: #0073ff;
+        color: white;
+      }
+
+      #tabelHasil tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      #tabelHasil tbody tr:hover {
+        background-color: #c7d7f0;
+      }
+
+      .hapusBtn {
+        background-color: #ff3333;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 5px 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .hapusBtn:hover {
+        background-color: #ff1a1a;
+      }
+      .span {
+        color: #ff1a1a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>
+        Tebak Masa Depan Bedasarkan Nama <br />
+        <span>Tuliskan Nama Anda di Kolom Komentar!</span>
+      </h1>
+
+      <!-- Input Nama -->
+      <input type="text" id="namaInput" placeholder="Masukkan Nama..." />
+      <button onclick="tebakMasaDepan()">Tebak Masa Depan</button>
+
+      <!-- Tabel Hasil -->
+      <table id="tabelHasil">
+        <thead>
+          <th>Nama</th>
+          <th>Sifat</th>
+          <th>Aksi</th>
+        </thead>
+        <tbody>
+          <!-- Baris hasil akan ditambahkan di sini -->
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      function tebakMasaDepan() {
+        const nama = document
+          .getElementById("namaInput")
+          .value.trim()
+          .toLowerCase();
+        const tabelBody = document
+          .getElementById("tabelHasil")
+          .getElementsByTagName("tbody")[0];
+
+        // ambil huruf tengah dari nama
+        const panjangNama = nama.length;
+        let hurufTengah = "";
+
+        if (panjangNama % 2 === 1) {
+          // jika jumlah huruf ganjil, ambil huruf dari tengah
+          hurufTengah = nama.charAt(Math.floor(panjangNama / 2));
+        } else {
+          // jika jumlah huruf genap, ambil huruf dari tengah kanan
+          hurufTengah = nama.charAt(Math.floor(panjangNama / 2) - 1);
+        }
+
+        // daftar sifat bedasarkan huruf tengah
+        let masaDepan = "";
+        const masaDepanList = {
+          a: "Kamu akan menjadi raja iblis.",
+          b: "Kamu sangat culun mungkin jadi kutu buku.",
+          c: "Kamu keren mungkin jadi badut.",
+          d: "Kamu punya aura suram jadi wibu aja.",
+          e: "Kamu akan menjadi bajak laut.",
+          f: "Kamu goodlooking dan akan menjadi idol.",
+          g: "Kamu kuat mungkin jadi pahlawan kesiangan.",
+          h: "Kamu penuh semangat jadi animek aja.",
+          i: "Kamu akan menjadi programmer handal tapi enggan ngoding.",
+          j: "Kamu akan menjadi superhero.",
+          k: "Kamu mandiri dan akan menjadi ultraman.",
+          l: "Kamu sangat perhatian maka jadi badut saja.",
+          m: "Kamu pendengar yang baik mungkin akan jadi badut.",
+          n: "Kamu mungkin jadi hangker.",
+          o: "Kamu akan menjadi penguasa bumi.",
+          p: "Kamu egois mungkin jadi villain.",
+          q: "Kamu akan jadi power rangers.",
+          r: "Kamu akan menjadi pejabat korup.",
+          s: "Kamu akan menjadi pahlawan kesiangan.",
+          t: "Kamu pekerja keras dan akan menjadi tiktokers.",
+          u: "Kamu kreatif dan akan menjadi hengker.",
+          v: "Kamu akan menjadi manipulator handal.",
+          w: "Kamu akan menjadi bandar narkoboy.",
+          x: "Kamu akan menjadi boboiboy api.",
+          y: "Kamu akan menjadi boboiboy air.",
+          z: "Kamu akan menjadi penyihir handal.",
+        };
+
+        // tentukan sifat bedasarkan huruf tengah
+        future =
+          masaDepanList[hurufTengah] ||
+          "Nama ini sangat unik, masa depanmu juga keren!";
+
+        // menambahkan baris baru ke tabel
+        const row = tabelBody.insertRow();
+        const cellNama = row.insertCell(0);
+        const cellSifat = row.insertCell(1);
+        const cellHapus = row.insertCell(2);
+
+        cellNama.textContent = nama.charAt(0).toUpperCase() + nama.slice(1); // mengubah huruf pertama jadi kapital
+        cellSifat.textContent = future;
+
+        // menambahkan tombol hapus
+        const hapusButton = document.createElement("button");
+        hapusButton.textContent = "Hapus";
+        hapusButton.classList.add("hapusBtn");
+        hapusButton.onclick = function () {
+          tabelBody.deleteRow(row.rowIndex - 1); // menghapus baris yang diklik
+        };
+
+        cellHapus.appendChild(hapusButton);
+      }
+    </script>
+  </body>
+</html>
